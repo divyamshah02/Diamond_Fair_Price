@@ -46,19 +46,22 @@ builderTabs.forEach((tab) => {
   })
 })
 
-const attributeButtons = document.querySelectorAll(".attribute-btn")
+const attributeButtons = document.querySelectorAll(".attribute-btn, .shape-option")
 
 attributeButtons.forEach((button) => {
   button.addEventListener("click", function () {
-    const parent = this.closest(".attribute-options")
+    const parent = this.closest(".attribute-options, .shape-options")
 
-    parent.querySelectorAll(".attribute-btn").forEach((btn) => {
+    parent.querySelectorAll(".attribute-btn, .shape-option").forEach((btn) => {
       btn.classList.remove("active")
     })
 
     this.classList.add("active")
 
     // Update visualization for current tab only
+    if (this.hasAttribute("data-shape")) {
+      updateShapeVisualization(this.getAttribute("data-shape"))
+    }
     if (this.hasAttribute("data-carat")) {
       updateCaratVisualization(this.getAttribute("data-carat"))
     }
@@ -73,6 +76,36 @@ attributeButtons.forEach((button) => {
     }
   })
 })
+
+function updateShapeVisualization(shape) {
+  const label = document.getElementById("shapeLabel")
+  const image = document.getElementById("shapeImage")
+  
+  const shapeNames = {
+    round: "Round Brilliant",
+    princess: "Princess Cut",
+    emerald: "Emerald Cut",
+    oval: "Oval Cut",
+    cushion: "Cushion Cut",
+    pear: "Pear Shape",
+    marquise: "Marquise Cut",
+    heart: "Heart Shape",
+  }
+  
+  const shapeImages = {
+    round: "/public/diamond-round.jpg",
+    princess: "/public/diamond-princess.jpg",
+    emerald: "/public/diamond-emerald.jpg",
+    oval: "/public/diamond-oval.jpg",
+    cushion: "/public/diamond-cushion.jpg",
+    pear: "/public/diamond-pear.jpg",
+    marquise: "/public/diamond-marquise.jpg",
+    heart: "/public/diamond-heart.jpg",
+  }
+  
+  label.textContent = shapeNames[shape] || "Select a Shape"
+  image.src = shapeImages[shape] || "/public/diamond-round.jpg"
+}
 
 function updateCaratVisualization(carat) {
   const label = document.getElementById("caratLabel")
